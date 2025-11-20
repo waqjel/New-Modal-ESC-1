@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <label for="AvailableTime">What time?</label>
+        <select name="AvailableTime" id="AvailableTime">
+    
+        </select>
+        <br><br>
+        
+        
+    </form>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const slots = document.querySelector("#AvailableTime");
+            const date = "2025-11-20";
+            const challenge = 10;
+            const availableTimeSlots = [];
+            
+            try {
+                // Fetch data from API when page loads
+                const response = await fetch(`https://lernia-sjj-assignments.vercel.app/api/booking/available-times?date=${date}&challenge=${challenge}`);
+                
+                if (!response.ok) {
+                    throw new Error('Response not OK!');
+                }
+                
+                const data = await response.json();
+                
+                // Clear loading message
+                slots.innerHTML = '';
+                
+                // Adding each Slot as an option in the html
+                data.slots.forEach(slot => {
+                    availableTimeSlots.push(slot)
+                    const option = document.createElement('option');
+                    option.value = slot;
+                    option.textContent = slot;
+                    slots.appendChild(option);
+                });
+                console.log(availableTimeSlots)
+                
+            } catch (error) {
+                // Error message
+                slots.innerHTML = '';
+                const errorOption = document.createElement('option');
+                errorOption.value = '';
+                errorOption.textContent = 'Error loading time slots';
+                errorOption.className = 'error';
+                slots.appendChild(errorOption);
+                console.error('Error fetching time slots:', error);
+            }
+        });
+    </script>
+</body>
+</html>

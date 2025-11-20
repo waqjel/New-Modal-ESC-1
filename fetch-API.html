@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>ESC API</h1>
+    <p id="details"></p>
+    <button class="fetchDataBtn">Fetch data from API</button>
+
+
+  <script defer>
+    //Fetch data from API
+    const details = document.querySelector("#details");
+    const fetchDataBtn = document.querySelector(".fetchDataBtn");
+    let esc_data = "";
+    fetchDataBtn.addEventListener('click', async function(){
+        const res = await fetch('https://lernia-sjj-assignments.vercel.app/api/challenges');
+        const data = await res.json();
+        
+        //Loop through json to find the keys and values
+        data.challenges.forEach(challenge => {
+            let detailInfo = {
+                id: challenge.id,
+                title: challenge.title,
+                description: challenge.description,
+                min_participants: challenge.minParticipants,
+                max_participants: challenge.maxParticipants,
+                rating: challenge.rating,
+                image: challenge.image,
+                labels: challenge.labels,
+            };
+            
+            //Adding the keys and values to the string to further render it through html
+            for(const key in detailInfo){
+                esc_data += `${key}: ${detailInfo[key]} <br>`;
+            }
+            esc_data += "<hr>";
+        });
+        //Add to html
+        details.innerHTML = esc_data;
+    });
+  </script>  
+</body>
+</html>
